@@ -483,8 +483,8 @@ md-refactored-static/
 - [x] Step 5 — Translate Utilities from .gs to Browser JS (completed 2025-01-19)
 - [x] Step 6 — Update API Layer to Use CSV Data Layer (completed 2025-01-19)
 - [x] Step 7 — Replace Metadata Fetching with Stubs (completed 2025-01-19)
-- [ ] Step 8 — Update User Preferences to Use localStorage
-- [ ] Step 9 — Create Sample CSV Data File
+- [x] Step 8 — Update User Preferences to Use localStorage (completed 2025-01-19)
+- [x] Step 9 — Create Sample CSV Data File (completed 2025-01-19)
 - [ ] Step 10 — Update HTML Script Tags and Asset References
 - [ ] Step 11 — Clean Up Original .gs Files
 - [ ] Step 12 — Create README.md with Deployment Instructions
