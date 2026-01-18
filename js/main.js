@@ -338,9 +338,7 @@ async function loadEntries() {
         try {
                 showToast("Loading entries...", "info");
                 
-                const entries = await new Promise((resolve, reject) => {
-                        google.script.run.withSuccessHandler(resolve).withFailureHandler(reject).getAllEntries();
-                });
+                const entries = await api.getAllEntries();
                 
                 console.log("Data received from server:", entries);
                 
@@ -570,9 +568,7 @@ async function startPendingItem(event, entryId) {
         event.stopPropagation();
         
         try {
-                const result = await new Promise((resolve, reject) => {
-                        google.script.run.withSuccessHandler(resolve).withFailureHandler(reject).startPendingEntry(entryId);
-                });
+                const result = await api.startPendingEntry(entryId);
                 
                 if (result.success) {
                         // Update local data
@@ -849,9 +845,7 @@ async function markAsFinished(event, entryId) {
         updateData.status = newStatus;
         
         try {
-                const result = await new Promise((resolve, reject) => {
-                        google.script.run.withSuccessHandler(resolve).withFailureHandler(reject).updateEntry(entryId, updateData);
-                });
+                const result = await api.updateEntry(entryId, updateData);
                 
                 if (result.success) {
                         entry.finishdate = updateData.finishDate;
@@ -893,18 +887,22 @@ async function fallbackToPlaceholder(entryId) {
         showToast("Generating placeholder image...", "info", 1500);
         
         try {
-                const result = await new Promise((resolve, reject) => {
-                        console.log(`CALLING BACKEND fallbackToPlaceholder...`);
-                        google.script.run.withSuccessHandler(resolve).withFailureHandler(reject).fallbackToPlaceholder(entryId);
-                });
+                // Generate placeholder locally (static version - no backend API)
+                const placeholderURL = generateQualityPlaceholder(entry.title, entry.type);
                 
-                console.log(`BACKEND RESULT RECEIVED:`, result);
+                console.log(`GENERATED PLACEHOLDER URL: ${placeholderURL}`);
+                
+                // Update entry with placeholder
+                const updateData = { coverurl: placeholderURL };
+                const result = await api.updateEntry(entryId, updateData);
+                
+                console.log(`ENTRY UPDATE RESULT:`, result);
                 
                 if (result.success) {
-                        console.log(`BACKEND SUCCESS - Checking for unauthorized changes...`);
+                        console.log(`SUCCESS - Checking for unauthorized changes...`);
                         
                         // Update the entry in the current entries array
-                        entry.coverurl = result.coverURL;
+                        entry.coverurl = placeholderURL;
                         
                         // SECURITY CHECK: Ensure status and rating haven't changed
                         if (entry.status !== originalStatus) {
@@ -975,25 +973,29 @@ async function requestNewCover(entryId) {
         console.log(`Rating: '${originalRating}'`);
         console.log(`Full entry object:`, entry);
         
-        showToast("Searching for alternative cover...", "info", 2000);
+        showToast("Generating alternative cover...", "info", 2000);
         
         try {
-                const result = await new Promise((resolve, reject) => {
-                        console.log(`CALLING BACKEND requestNewCover...`);
-                        google.script.run.withSuccessHandler(resolve).withFailureHandler(reject).requestNewCover(entryId);
-                });
+                // Generate placeholder locally (static version - no backend API)
+                const placeholderURL = generateQualityPlaceholder(entry.title, entry.type);
                 
-                console.log(`BACKEND RESULT RECEIVED:`, result);
+                console.log(`GENERATED ALTERNATIVE COVER URL: ${placeholderURL}`);
+                
+                // Update entry with placeholder
+                const updateData = { coverurl: placeholderURL };
+                const result = await api.updateEntry(entryId, updateData);
+                
+                console.log(`ENTRY UPDATE RESULT:`, result);
                 
                 if (result.success) {
-                        console.log(`BACKEND SUCCESS - Checking for unauthorized changes...`);
+                        console.log(`SUCCESS - Checking for unauthorized changes...`);
                         
                         // CRITICAL FIX: Verify no unintended changes occurred
                         console.log(`Cover update result:`, result);
                         console.log(`Original status: ${originalStatus}, Original rating: ${originalRating}`);
                         
                         // Update only the cover URL, preserve all other data
-                        entry.coverurl = result.coverURL;
+                        entry.coverurl = placeholderURL;
                         
                         // SECURITY CHECK: Ensure status and rating haven't changed
                         if (entry.status !== originalStatus) {
@@ -1062,9 +1064,7 @@ async function submitRating(isNotRated = false) {
         btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
         
         try {
-                const result = await new Promise((resolve, reject) => {
-                        google.script.run.withSuccessHandler(resolve).withFailureHandler(reject).updateEntry(ratingEntryId, entryData);
-                });
+                const result = await api.updateEntry(ratingEntryId, entryData);
                 
                 if (result.success) {
                         const entry = currentEntries.find((e) => e.id === ratingEntryId);
@@ -1161,9 +1161,7 @@ async function handleFormSubmission(e) {
         submitBtn.disabled = true;
         
         try {
-                const result = await new Promise((resolve, reject) => {
-                        google.script.run.withSuccessHandler(resolve).withFailureHandler(reject).addMediaEntry(formData);
-                });
+                const result = await api.addMediaEntry(formData);
                 
                 if (result.success) {
                         showFormFeedback("toast_entry_added", "success"); // Pass the KEY
@@ -1223,9 +1221,7 @@ function clearFormFeedback() {
 // Statistics
 async function loadStatistics() {
         try {
-                const stats = await new Promise((resolve, reject) => {
-                        google.script.run.withSuccessHandler(resolve).withFailureHandler(reject).getStatistics();
-                });
+                const stats = await api.getStatistics();
                 
                 updateStatisticsDisplay(stats);
                 } catch (error) {
@@ -1834,9 +1830,7 @@ async function saveNotes() {
         saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
         
         try {
-                const result = await new Promise((resolve, reject) => {
-                        google.script.run.withSuccessHandler(resolve).withFailureHandler(reject).updateEntry(currentEntryId, updateData);
-                });
+                const result = await api.updateEntry(currentEntryId, updateData);
                 
                 if (result.success) {
                         // Update local data store
@@ -1993,9 +1987,7 @@ async function saveEntryChanges(event) {
         console.log(`Original hyperating: '${entry.hyperating}' → Final hyperating: '${updateData.hyperating}'`);
         
         try {
-                const result = await new Promise((resolve, reject) => {
-                        google.script.run.withSuccessHandler(resolve).withFailureHandler(reject).updateEntry(entryId, updateData);
-                });
+                const result = await api.updateEntry(entryId, updateData);
                 
                 if (result.success) {
                         // CRITICAL FIX: Update local data properly for pending entries
@@ -2072,9 +2064,7 @@ async function deleteCurrentEntry() {
         }
         
         try {
-                const result = await new Promise((resolve, reject) => {
-                        google.script.run.withSuccessHandler(resolve).withFailureHandler(reject).deleteEntry(currentEntryId);
-                });
+                const result = await api.deleteEntry(currentEntryId);
                 
                 if (result.success) {
                         currentEntries = currentEntries.filter((e) => e.id !== currentEntryId);
@@ -2219,9 +2209,7 @@ document.getElementById("addPendingForm").addEventListener("submit", async (e) =
         submitBtn.disabled = true;
         
         try {
-                const result = await new Promise((resolve, reject) => {
-                        google.script.run.withSuccessHandler(resolve).withFailureHandler(reject).addPendingEntry(formData);
-                });
+                const result = await api.addPendingEntry(formData);
                 
                 if (result.success) {
                         showFormFeedback("Added to pending list!", "success");
