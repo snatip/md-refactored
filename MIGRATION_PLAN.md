@@ -480,9 +480,9 @@ md-refactored-static/
 - [x] Step 2 — Extract CSS into Dedicated Stylesheet Directory (completed 2025-01-18)
 - [x] Step 3 — Extract Inline JavaScript from index.html (completed 2025-01-18)
 - [x] Step 4 — Create Browser-Compatible Data Layer (CSV Reader/Writer) (completed 2025-01-18)
-- [ ] Step 5 — Translate Utilities from .gs to Browser JS
-- [ ] Step 6 — Update API Layer to Use CSV Data Layer
-- [ ] Step 7 — Replace Metadata Fetching with Stubs
+- [x] Step 5 — Translate Utilities from .gs to Browser JS (completed 2025-01-19)
+- [x] Step 6 — Update API Layer to Use CSV Data Layer (completed 2025-01-19)
+- [x] Step 7 — Replace Metadata Fetching with Stubs (completed 2025-01-19)
 - [ ] Step 8 — Update User Preferences to Use localStorage
 - [ ] Step 9 — Create Sample CSV Data File
 - [ ] Step 10 — Update HTML Script Tags and Asset References
