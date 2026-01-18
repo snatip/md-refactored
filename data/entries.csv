@@ -1,0 +1,6 @@
+id,title,type,author,startdate,finishdate,rating,notes,coverurl,metadata,createdat,status,tags,hyperating
+550e8400-e29b-41d4-a716-446655440001,The Legend of Zelda: Breath of the Wild,videogame,Nintendo,2023-01-15,2023-02-20,9,Amazing open world exploration,,{},"2023-01-15T10:00:00.000Z",completed,action,5
+550e8400-e29b-41d4-a716-446655440002,Dune,film,Denis Villeneuve,2023-03-10,,8,Great visual effects and storytelling,,{},"2023-03-10T14:30:00.000Z",in-progress,sci-fi,4
+550e8400-e29b-41d4-a716-446655440003,The Pragmatic Programmer,book,Andrew Hunt and David Thomas,2023-02-01,2023-02-28,9,Essential reading for software developers,,{},"2023-02-01T09:00:00.000Z",completed,programming,5
+550e8400-e29b-41d4-a716-446655440004,Breaking Bad,series,Vince Gilligan,2023-04-01,2023-04-15,10,One of the best TV series ever made,,{},"2023-04-01T16:00:00.000Z",completed,drama,5
+550e8400-e29b-41d4-a716-446655440005,Attention Is All You Need,paper,Vaswani et al.,,2023-05-20,,The transformer paper that changed NLP,,{},"2023-05-20T11:00:00.000Z",pending,machine-learning,4
