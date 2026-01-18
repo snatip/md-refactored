@@ -485,7 +485,7 @@ md-refactored-static/
 - [x] Step 7 — Replace Metadata Fetching with Stubs (completed 2025-01-19)
 - [x] Step 8 — Update User Preferences to Use localStorage (completed 2025-01-19)
 - [x] Step 9 — Create Sample CSV Data File (completed 2025-01-19)
-- [ ] Step 10 — Update HTML Script Tags and Asset References
-- [ ] Step 11 — Clean Up Original .gs Files
-- [ ] Step 12 — Create README.md with Deployment Instructions
+- [x] Step 10 — Update HTML Script Tags and Asset References (completed 2026-01-18, commit: 33faa45d3a37938803be1c21ba550ea457aedc3f)
+- [x] Step 11 — Clean Up Original .gs Files (completed 2026-01-18, commit: 33faa45d3a37938803be1c21ba550ea457aedc3f)
+- [x] Step 12 — Create README.md with Deployment Instructions (completed 2026-01-18, commit: 33faa45d3a37938803be1c21ba550ea457aedc3f)
 - [ ] Step 13 — Final Integration Testing and Bug Fixes
