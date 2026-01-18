@@ -10,26 +10,31 @@ function closeSidenav() {
 }
 
 // Initialize the application
-function initializeApp() {
+async function initializeApp() {
         console.log("Initializing Multimedia Diary...");
-        
+
         // Set theme
         document.documentElement.setAttribute("data-theme", currentTheme);
         updateThemeIcon();
-        
+
         // Setup event listeners
         setupEventListeners();
-        
-        // Load initial data
-        loadEntries();
-        
+
         // Setup form
         setupForm();
-        
-        // Hide loading screen
-        setTimeout(() => {
-                document.getElementById("loadingScreen").classList.add("hidden");
-        }, 1000);
+
+        // Load initial data and wait for it to complete
+        try {
+                await loadEntries();
+        } catch (error) {
+                console.error("Error during initialization:", error);
+        }
+
+        // Hide loading screen after data is loaded
+        const loadingScreen = document.getElementById("loadingScreen");
+        if (loadingScreen) {
+                loadingScreen.classList.add("hidden");
+        }
 }
 
 // Setup all event listeners
@@ -222,18 +227,28 @@ function setupEventListeners() {
 
 // Enhanced form logic for different item types
 function updateFormBasedOnDates() {
-        const startDate = document.getElementById("startDate").value;
-        const finishDate = document.getElementById("finishDate").value;
-        const isFinished = document.getElementById("isFinished")?.checked || false;
+        const startDate = document.getElementById("startDate");
+        const finishDate = document.getElementById("finishDate");
         const ratingSection = document.getElementById("ratingSection");
         const finishedSection = document.getElementById("finishedSection");
         const ratingLabel = document.querySelector('label[for="rating"]');
         const ratingInput = document.getElementById("rating");
-        
-        if (!startDate && !finishDate) {
+        const isFinishedCheckbox = document.getElementById("isFinished");
+
+        // Check if all required elements exist before proceeding
+        if (!startDate || !finishDate || !ratingSection || !finishedSection || !ratingLabel || !ratingInput) {
+                console.warn("Required form elements not found, skipping updateFormBasedOnDates");
+                return;
+        }
+
+        const startDateValue = startDate.value;
+        const finishDateValue = finishDate.value;
+        const isFinished = isFinishedCheckbox?.checked || false;
+
+        if (!startDateValue && !finishDateValue) {
                 // Type 1: No dates - show finished checkbox
                 finishedSection.style.display = "flex";
-                
+
                 if (isFinished) {
                         // Show rating section when marked as finished
                         ratingSection.style.display = "flex";
@@ -251,13 +266,13 @@ function updateFormBasedOnDates() {
                         ratingInput.disabled = true;
                         ratingInput.value = 0; // Reset to 0
                 }
-                } else if (!startDate && finishDate) {
+                } else if (!startDateValue && finishDateValue) {
                 // Type 2: Only finish date
                 finishedSection.style.display = "none";
                 ratingSection.style.display = "flex";
                 ratingInput.disabled = false;
                 ratingLabel.innerHTML = `<i class="fas fa-star"></i> Rating (0 for no rating)`;
-                } else if (startDate && !finishDate) {
+                } else if (startDateValue && !finishDateValue) {
                 // Type 3: In progress - hide both
                 finishedSection.style.display = "none";
                 ratingSection.style.display = "none";
@@ -269,7 +284,7 @@ function updateFormBasedOnDates() {
                 ratingInput.disabled = false;
                 ratingLabel.innerHTML = `<i class="fas fa-star"></i> Rating (0 for no rating)`;
         }
-        
+
         // Update rating display
         updateRatingDisplay();
 }
@@ -1103,16 +1118,24 @@ function setupForm() {
 
 function updateRatingDisplay() {
         const ratingInput = document.getElementById("rating");
-        const ratingValue = parseInt(ratingInput.value);
-        
+        const ratingValueDisplay = document.getElementById("ratingValue");
+        const starsContainer = document.getElementById("ratingStars");
+
+        // Check if required elements exist
+        if (!ratingInput || !ratingValueDisplay || !starsContainer) {
+                console.warn("Rating display elements not found, skipping update");
+                return;
+        }
+
+        const ratingValue = parseInt(ratingInput.value) || 0;
+
         // --- THIS IS THE FIX ---
         // Display 'N/A' when slider is at 0
         const displayValue = ratingValue === 0 ? "N/A" : ratingValue;
-        document.getElementById("ratingValue").textContent = displayValue;
-        
-        const starsContainer = document.getElementById("ratingStars");
+        ratingValueDisplay.textContent = displayValue;
+
         starsContainer.innerHTML = "";
-        
+
         // When rating is 0, this loop correctly shows 10 empty stars
         for (let i = 1; i <= 10; i++) {
                 const star = document.createElement("span");
@@ -2090,7 +2113,9 @@ function toggleTheme() {
 
 function updateThemeIcon() {
         const themeBtn = document.querySelector(".theme-toggle i");
-        themeBtn.className = currentTheme === "dark" ? "fas fa-sun" : "fas fa-moon";
+        if (themeBtn) {
+                themeBtn.className = currentTheme === "dark" ? "fas fa-sun" : "fas fa-moon";
+        }
 }
 
 // Toast notifications
