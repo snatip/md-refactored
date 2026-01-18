@@ -477,8 +477,8 @@ md-refactored-static/
 ## C. Progress Log
 
 - [x] Step 1 — Create Target Directory Structure and Copy Files (completed 2025-01-18)
-- [ ] Step 2 — Extract CSS into Dedicated Stylesheet Directory
-- [ ] Step 3 — Extract Inline JavaScript from index.html
+- [x] Step 2 — Extract CSS into Dedicated Stylesheet Directory (completed 2025-01-18)
+- [x] Step 3 — Extract Inline JavaScript from index.html (completed 2025-01-18)
 - [ ] Step 4 — Create Browser-Compatible Data Layer (CSV Reader/Writer)
 - [ ] Step 5 — Translate Utilities from .gs to Browser JS
 - [ ] Step 6 — Update API Layer to Use CSV Data Layer

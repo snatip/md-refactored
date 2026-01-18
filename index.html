@@ -6,7 +6,7 @@
     <title>My Multimedia Diary</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-	<link rel="stylesheet" href="styles.css">
+        <link rel="stylesheet" href="css/styles.css">
   </head>
   <body>
     <!-- Loading Screen -->
@@ -47,10 +47,10 @@
           </button>
         </div>
         <div class="nav-actions">
-          <button class="hamburger-btn" onclick="openSidenav()">
+          <button class="hamburger-btn" id="hamburgerBtn">
             <i class="fas fa-bars"></i>
           </button>
-          <button class="theme-toggle" onclick="toggleTheme()">
+          <button class="theme-toggle" id="themeToggleBtn">
             <i class="fas fa-sun"></i>
           </button>
         </div>
@@ -59,7 +59,7 @@
 
     <!-- Sidenav and Overlay -->
     <div id="sidenav" class="sidenav">
-      <a href="javascript:void(0)" class="sidenav-close" onclick="closeSidenav()">&times;</a>
+      <a href="javascript:void(0)" class="sidenav-close" id="sidenavClose">&times;</a>
       <button class="nav-btn active" data-view="room">
         <i class="fas fa-home"></i>
         <span>Room</span>
@@ -81,7 +81,7 @@
         <span>Add</span>
       </button>
     </div>
-    <div id="overlay" class="overlay" onclick="closeSidenav()"></div>
+    <div id="overlay" class="overlay"></div>
 
     <!-- Main Content Container -->
     <main class="main-container">
@@ -335,8 +335,8 @@
         </div>
         <div class="add-container">
           <div class="form-tabs">
-            <button class="form-tab active" data-form="direct" onclick="switchFormTab('direct')"><i class="fas fa-plus"></i> Add Started Item</button>
-            <button class="form-tab" data-form="pending" onclick="switchFormTab('pending')"><i class="fas fa-clock"></i> Add to Pending</button>
+            <button class="form-tab active" data-form="direct"><i class="fas fa-plus"></i> Add Started Item</button>
+            <button class="form-tab" data-form="pending"><i class="fas fa-clock"></i> Add to Pending</button>
           </div>
 
           <form id="addEntryForm" class="modern-form">
@@ -362,7 +362,7 @@
                   <option value="paper">📄 Scientific Paper</option>
                 </select>
               </div>
-              <div class="form-group" id="authorSection" style="display: none;">
+              <div class="form-group hidden" id="authorSection">
                 <label for="author">
                   <i class="fas fa-user-edit"></i>
                   Author
@@ -372,7 +372,7 @@
             </div>
 
             <!-- CRITICAL FIX: Make author section full width (not in form-row) -->
-            <div class="form-group" id="authorSectionFullWidth" style="display: none;">
+            <div class="form-group hidden" id="authorSectionFullWidth">
               <label for="authorFullWidth">
                 <i class="fas fa-user-edit"></i>
                 Author
@@ -403,12 +403,12 @@
               </div>
             </div>
 
-            <div class="form-group" id="finishedSection" style="display: none;">
+            <div class="form-group hidden" id="finishedSection">
               <label class="modern-checkbox">
                 <input type="checkbox" id="isFinished" />
                 <span class="checkmark"></span>
                 <div class="modern-checkbox-label">
-                  <span><i class="fas fa-check-circle" style="color: var(--accent-success); margin-right: 4px;"></i>Mark as finished</span>
+                  <span><i class="fas fa-check-circle text-success margin-right-sm"></i>Mark as finished</span>
                   <small>Check this if you've completed this item but don't remember when you started/finished it</small>
                 </div>
               </label>
@@ -439,7 +439,7 @@
             </div>
 
             <div class="form-actions">
-              <button type="button" class="btn-secondary" onclick="resetForm()">
+              <button type="button" class="btn-secondary" id="resetFormBtn">
                 <i class="fas fa-undo"></i>
                 Reset
               </button>
@@ -450,7 +450,7 @@
             </div>
           </form>
 
-          <form id="addPendingForm" class="pending-form" style="display: none;">
+          <form id="addPendingForm" class="pending-form hidden">
             <div class="form-row">
               <div class="form-group">
                 <label for="pendingTitle">
@@ -476,7 +476,7 @@
             </div>
 
             <!-- CRITICAL FIX: Add author field for books - initially hidden -->
-            <div class="form-group" id="pendingAuthorSection" style="display: none;">
+            <div class="form-group hidden" id="pendingAuthorSection">
               <label for="pendingAuthor">
                 <i class="fas fa-user-edit"></i>
                 Author
@@ -503,50 +503,16 @@
               </label>
               <div class="rating-container">
                 <input type="range" id="pendingHype" min="1" max="10" value="5" />
-                <div style="
-                  display: flex;
-                  align-items: center;
-                  gap: 4px;
-                  position: relative;
-                " id="pendingHypeFire">
+                <div class="hype-rating-container" id="pendingHypeFire">
                   <!-- Fire emojis positioned properly -->
-                  <span style="
-                    position: relative;
-                    display: flex;
-                    align-items: center;
-                    gap: 2px;
-                    margin-right: 4px;
-                  ">
-                    <span style="font-size: 14px; animation: fireFlicker 1.5s ease-in-out infinite alternate;">🔥</span>
+                  <span class="hype-fire-wrapper">
+                    <span class="hype-fire">🔥</span>
                   </span>
-                  
+
                   <!-- Orange rating box with contained shine effect -->
-                  <span style="
-                    background: linear-gradient(135deg, #ff6200, #ff9500, #ff6200);
-                    background-size: 200% 200%;
-                    color: white;
-                    padding: 4px 8px;
-                    border-radius: 6px;
-                    font-weight: 700;
-                    font-size: 12px;
-                    min-width: 40px;
-                    text-align: center;
-                    border: 2px solid rgba(255, 94, 0, 0.3);
-                    box-shadow: 0 0 15px rgba(255, 94, 0, 0.4);
-                    animation: hypeGlow 3s ease-in-out infinite alternate;
-                    position: relative;
-                    overflow: hidden;
-                  " id="pendingHypeValue">5/10
+                  <span class="hype-value" id="pendingHypeValue">5/10
                     <!-- Contained shine effect -->
-                    <span style="
-                      position: absolute;
-                      top: 0;
-                      left: -100%;
-                      width: 100%;
-                      height: 100%;
-                      background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.4) 50%, transparent 70%);
-                      animation: hypeShine 4s ease-in-out infinite;
-                    "></span>
+                    <span class="hype-shine"></span>
                   </span>
                 </div>
               </div>
@@ -561,7 +527,7 @@
             </div>
 
             <div class="form-actions">
-              <button type="button" class="btn-secondary" onclick="resetPendingForm()">
+              <button type="button" class="btn-secondary" id="resetPendingFormBtn">
                 <i class="fas fa-undo"></i>
                 Reset
               </button>
@@ -583,21 +549,21 @@
         <div class="modal-header">
           <h3 class="view-mode" id="modalTitle">Entry Details</h3>
           <h3 class="edit-mode">Edit Entry</h3>
-          <button class="modal-close" onclick="closeModal()">
+          <button class="modal-close" id="modalCloseBtn">
             <i class="fas fa-times"></i>
           </button>
         </div>
-        <form id="modalEditForm" onsubmit="saveEntryChanges(event)">
+        <form id="modalEditForm">
           <div class="modal-body" id="modalBody">
             <!-- Dynamic content will be generated by JS -->
           </div>
           <div class="modal-footer">
             <!-- View Mode Buttons -->
-            <button type="button" class="btn-secondary view-mode" onclick="closeModal()">Close</button>
-            <button type="button" class="btn-primary view-mode" onclick="toggleEntryEdit(true)"><i class="fas fa-edit"></i> Edit</button>
-            <button type="button" class="btn-danger view-mode" onclick="deleteCurrentEntry()"><i class="fas fa-trash"></i> Delete</button>
+            <button type="button" class="btn-secondary view-mode" id="modalCloseViewBtn">Close</button>
+            <button type="button" class="btn-primary view-mode" id="modalEditBtn"><i class="fas fa-edit"></i> Edit</button>
+            <button type="button" class="btn-danger view-mode" id="modalDeleteBtn"><i class="fas fa-trash"></i> Delete</button>
             <!-- Edit Mode Buttons -->
-            <button type="button" class="btn-secondary edit-mode" onclick="toggleEntryEdit(false)">Cancel</button>
+            <button type="button" class="btn-secondary edit-mode" id="modalCancelEditBtn">Cancel</button>
             <button type="submit" class="btn-primary edit-mode"><i class="fas fa-save"></i> Save Changes</button>
           </div>
         </form>
@@ -609,9 +575,9 @@
 
     <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
-	<script src="js/config.js"></script>
-	<script src="js/utils.js"></script>
-	<script src="js/api.js"></script>
-	<script src="js/main.js"></script>
+        <script src="js/config.js"></script>
+        <script src="js/utils.js"></script>
+        <script src="js/api.js"></script>
+        <script src="js/main.js"></script>
   </body>
 </html>
